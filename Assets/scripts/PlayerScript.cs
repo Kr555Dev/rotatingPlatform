@@ -7,8 +7,12 @@ using TMPro;
 public class PlayerScript : MonoBehaviour
 {
     public Camera cam;
+    
     public Transform tr;
     public Text Score;
+    public GameObject PauseMenu;
+    public static bool isPaused = true;
+    [SerializeField] private int PlayTimeScore;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +37,7 @@ public class PlayerScript : MonoBehaviour
         if(collides.collider.name == "Ground")
         {
             Debug.Log("GAME OVER");
-            Invoke("Restart", 1f);
+            Invoke("die", 0.5f);
             return;
         }
 
@@ -42,7 +46,13 @@ public class PlayerScript : MonoBehaviour
             FindObjectOfType<Audiomanager>().Play("Bounce");
         }
     }
-
+    public void die()
+    {
+        PauseMenu.SetActive(true);
+        Time.timeScale = 0f;
+        isPaused = true;
+        PlayTimeScore = int.Parse(Score.text);
+    }
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
